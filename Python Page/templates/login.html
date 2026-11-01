@@ -1,0 +1,8 @@
+{% extends 'base.html' %}{% block title %}登入 · FaceTech{% endblock %}{% block content %}
+<section class="card narrow"><h1>登入本機帳戶</h1><p>原有本機帳戶仍可使用；雲端帳戶不會自動同步。</p>
+<form method="post">{{ form.hidden_tag() }}
+<label>{{ form.username.label }}{{ form.username(autocomplete='username',required=true) }}</label>
+<label>{{ form.password.label }}{{ form.password(autocomplete='current-password',required=true) }}</label>
+{% for field in form %}{% for error in field.errors %}<p class="error">{{ error }}</p>{% endfor %}{% endfor %}
+<label class="inline"><input type="checkbox" name="remember">保持登入</label>{{ form.submit(class_='button') }}</form>
+<p>首次使用？<a href="{{ url_for('register_page') }}">建立本機帳戶</a></p></section>{% endblock %}

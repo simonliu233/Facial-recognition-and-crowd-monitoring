@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<title>{% block title %}FaceTech 本機版{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static',filename='local.css') }}">
+</head>
+<body>
+<header><a class="brand" href="{{ url_for('home_page') }}">FaceTech <small>LOCAL</small></a>
+<nav>{% if current_user.is_authenticated %}
+<a href="{{ url_for('face_page') }}">總覽</a><a href="{{ url_for('clients') }}">人員資料</a>
+<a href="{{ url_for('face.index') }}">人臉識別</a><a href="{{ url_for('flow.index') }}">雙向人流</a>
+<a href="{{ url_for('user_settings') }}">設定</a>
+<form method="post" action="{{ url_for('logout') }}" class="inline"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="link">登出 {{ current_user.username }}</button></form>
+{% else %}<a href="{{ url_for('login_page') }}">登入</a><a href="{{ url_for('register_page') }}">註冊</a>{% endif %}</nav></header>
+<main>{% for message in get_flashed_messages() %}<p class="notice" role="status">{{ message }}</p>{% endfor %}
+{% block content %}{% endblock %}</main>
+<footer>資料儲存在這台電腦 · 本機 HTTP · 不需舊伺服器或網域</footer>
+{% block scripts %}{% endblock %}
+</body></html>

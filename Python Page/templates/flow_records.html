@@ -1,0 +1,6 @@
+{% extends 'base.html' %}{% block content %}
+<div class="heading"><h1>人流歷史紀錄</h1><a href="{{ url_for('flow.index') }}">返回計數</a></div>
+<p>正向為左→右或上→下，反向為右→左或下→上，取決於當時計數線方向。同日改變方向時，日累計會合併；作正式統計時應保持同一配置。</p>
+<div class="card table-wrap"><table><thead><tr><th>日期</th><th>正向通行</th><th>反向通行</th><th>合計</th></tr></thead><tbody>
+{% for r in records %}<tr><td>{{ r.date }}</td><td>{{ r.left_to_right }}</td><td>{{ r.right_to_left }}</td><td>{{ r.left_to_right+r.right_to_left }}</td></tr>
+{% else %}<tr><td colspan="4">尚無紀錄</td></tr>{% endfor %}</tbody></table></div>{% endblock %}

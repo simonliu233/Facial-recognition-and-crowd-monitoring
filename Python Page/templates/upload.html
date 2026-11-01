@@ -1,0 +1,7 @@
+{% extends 'base.html' %}{% block content %}
+<section class="card narrow"><h1>新增人員</h1><p>請選擇一張只有此人的清晰正面照片，檔案最多 8 MB。新增後識別資料會自動更新。</p>
+<form method="post" enctype="multipart/form-data"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<label>姓名<input name="name" maxlength="100" required></label><label>聯絡資料<input name="contact" maxlength="100" required></label>
+<label>年齡<input type="number" name="age" min="0" max="130" required></label>
+<label>性別<select name="gender"><option value="Male">男</option><option value="Female">女</option><option value="Other">其他</option></select></label>
+<label>照片<input type="file" name="file" accept="image/jpeg,image/png" required></label><button>儲存人員</button></form></section>{% endblock %}

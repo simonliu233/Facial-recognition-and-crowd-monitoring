@@ -1,0 +1,6 @@
+{% extends 'base.html' %}{% block content %}
+<div class="heading"><h1>人員資料</h1><a class="button" href="{{ url_for('upload') }}">新增人員</a></div>
+<form class="inline search" method="get"><input name="search" placeholder="搜尋姓名" value="{{ search }}"><button>搜尋</button></form>
+<div class="grid">{% for member in members %}<a class="card person" href="{{ url_for('client_detail',member_id=member.id) }}">
+<img src="{{ url_for('serve_photo',filename=member.image_path) }}" alt="{{ member.name }}"><h2>{{ member.name }}</h2><p>{{ member.age }} 歲 · {{ member.gender }} · {{ member.contact }}</p></a>
+{% else %}<section class="card"><p>尚無符合條件的人員資料。</p></section>{% endfor %}</div>{% endblock %}

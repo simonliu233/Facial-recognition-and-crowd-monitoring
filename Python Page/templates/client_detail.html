@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% block content %}
+<section class="card narrow"><h1>編輯人員</h1><img class="portrait" src="{{ url_for('serve_photo',filename=member.image_path) }}" alt="{{ member.name }}">
+<form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<label>姓名<input name="name" value="{{ member.name }}" maxlength="100" required></label>
+<label>聯絡資料<input name="contact" value="{{ member.contact }}" maxlength="100" required></label>
+<label>年齡<input type="number" name="age" value="{{ member.age }}" min="0" max="130" required></label>
+<label>性別<select name="gender">{% for value,label in [('Male','男'),('Female','女'),('Other','其他')] %}<option value="{{ value }}" {{ 'selected' if member.gender==value else '' }}>{{ label }}</option>{% endfor %}</select></label>
+<button>儲存變更</button><button type="button" id="deleteMember" class="danger">刪除此人員</button></form></section>{% endblock %}
+{% block scripts %}<script>
+document.getElementById('deleteMember').onclick=async()=>{
+if(!confirm('刪除此人員資料與其上傳照片？'))return;
+const r=await fetch({{ url_for('client_detail',member_id=member.id)|tojson }},{method:'DELETE',headers:{'X-CSRFToken':document.querySelector('meta[name="csrf-token"]').content}});
+if(r.ok)location.href={{ url_for('clients')|tojson }};else alert('刪除失敗，請重新登入後再試。');};
+</script>{% endblock %}

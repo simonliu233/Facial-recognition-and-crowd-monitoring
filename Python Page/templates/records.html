@@ -1,0 +1,6 @@
+{% extends 'base.html' %}{% block content %}
+<div class="heading"><h1>人臉識別紀錄</h1><a href="{{ url_for('face.index') }}">返回識別</a></div>
+<p>同一姓名在 3 分鐘內只記錄一次；相似度為距離換算值，不是經校準的身份正確機率。</p>
+<div class="card table-wrap"><table><thead><tr><th>日期</th><th>時間</th><th>姓名</th><th>表情估計</th><th>相似度</th></tr></thead><tbody>
+{% for record in records %}<tr><td>{{ record.date }}</td><td>{{ record.time }}</td><td>{{ record.name }}</td><td>{{ record.emotion }}</td><td>{{ '%.1f'|format(record.confidence*100) }}%</td></tr>
+{% else %}<tr><td colspan="5">尚無紀錄</td></tr>{% endfor %}</tbody></table></div>{% endblock %}

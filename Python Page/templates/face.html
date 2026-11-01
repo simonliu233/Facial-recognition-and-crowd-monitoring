@@ -1,0 +1,7 @@
+{% extends 'base.html' %}{% block content %}
+<h1>本機總覽</h1><div class="grid">
+<section class="card metric"><span>你管理的人員</span><strong>{{ members|length }}</strong><a href="{{ url_for('upload') }}">新增照片與資料 →</a></section>
+<section class="card metric"><span>今日正向通行</span><strong>{{ counts.left_to_right }}</strong><a href="{{ url_for('flow.index') }}">開啟人流計數 →</a></section>
+<section class="card metric"><span>今日反向通行</span><strong>{{ counts.right_to_left }}</strong><a href="{{ url_for('flow.view_records') }}">查看歷史紀錄 →</a></section></div>
+<section class="card"><h2>開始使用</h2><ol><li>在「人員資料」加入清晰、單人的正面照片。</li><li>開啟「人臉識別」，按開始並允許瀏覽器使用攝影機。</li><li>開啟「雙向人流」，先調整計數線與有效通道範圍，再開始計數。</li></ol>
+<p>人流總數是通過次數，並非不重複的人數；同一人返回時會計入反方向。</p></section>{% endblock %}

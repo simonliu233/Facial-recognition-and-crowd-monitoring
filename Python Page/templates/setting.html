@@ -1,0 +1,6 @@
+{% extends 'base.html' %}{% block content %}
+<h1>本機帳戶設定</h1><div class="grid"><section class="card"><h2>修改使用者名稱</h2><form action="{{ url_for('change_username') }}" method="post">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><label>新名稱<input name="new_username" minlength="4" maxlength="30" required></label><button>更新名稱</button></form></section>
+<section class="card"><h2>修改密碼</h2><form action="{{ url_for('change_password') }}" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<label>目前密碼<input type="password" name="current_password" autocomplete="current-password" required></label>
+<label>新密碼<input type="password" name="new_password" minlength="8" autocomplete="new-password" required></label><button>更新密碼</button></form></section></div>{% endblock %}

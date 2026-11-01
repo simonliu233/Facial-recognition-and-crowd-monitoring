@@ -1,0 +1,31 @@
+{% extends 'base.html' %}{% block content %}
+<div class="heading"><div><span class="eyebrow">固定攝影機 · 本機處理</span><h1>{{ '雙向人流計數' if mode=='flow' else '人臉識別' }}</h1></div>
+<a href="{{ url_for('flow.view_records') if mode=='flow' else url_for('face.view_records') }}">歷史紀錄 →</a></div>
+{% if mode=='flow' %}<div class="grid stats"><section class="card metric"><span id="forwardLabel">正向</span><strong id="forward">0</strong><small>今日累計</small></section>
+<section class="card metric"><span id="backwardLabel">反向</span><strong id="backward">0</strong><small>今日累計</small></section>
+<section class="card metric"><span>本次影片／攝影機</span><strong class="smaller" id="sessionCounts">0 / 0</strong><small>正向 / 反向；重新開始會歸零</small></section></div>{% endif %}
+<section class="card">
+<div class="controls"><label>攝影機<select id="cameraSelect"><option value="">預設攝影機</option></select></label>
+<button id="startCamera">開始攝影機</button><label class="file-button">選擇本機影片<input id="videoFile" type="file" accept="video/*"></label>
+<button id="stopCamera" class="secondary" disabled>停止</button><label>處理頻率<select id="targetFps"><option value="5">5 FPS</option><option value="10" {{ 'selected' if mode=='flow' else '' }}>10 FPS</option><option value="15">15 FPS</option>{% if mode=='face' %}<option value="2" selected>2 FPS</option>{% endif %}</select></label></div>
+<p id="status" class="notice" role="status">請選擇攝影機或本機影片。只有按下開始後才會請求攝影機權限。</p>
+<video id="sourceVideo" playsinline muted hidden></video><canvas id="preview" width="960" height="540"></canvas>
+<p id="details">影片會按影格順序處理，分析速度可能慢於原影片；畫面不鏡像，方向與計數一致。</p>
+{% if mode=='face' %}<p>年齡、性別與表情均為模型估計，不應作為已確認的個人資料。照片中的姓名來自本機人員資料或範例照片檔名。</p>{% endif %}
+</section>
+{% if mode=='flow' %}<section class="card"><h2>計數線與通道範圍</h2>
+<form id="flowSettings" class="controls">
+<label>移動方向<select id="axis"><option value="x">左右移動（垂直線）</option><option value="y">上下移動（水平線）</option></select></label>
+<label>線位置 %<input id="linePosition" type="number" min="10" max="90" value="50" required></label>
+<label>半緩衝寬度 %<input id="deadBand" type="number" min="1" max="15" value="4" required></label>
+<label>有效範圍起點 %<input id="roiStart" type="number" min="0" max="99" value="0" required></label>
+<label>有效範圍終點 %<input id="roiEnd" type="number" min="1" max="100" value="100" required></label>
+<button>套用設定</button></form><p>有效範圍沿計數線的方向量度。系統以人體框底部中心作定位點，確認離開緩衝區並到達另一側才計數。設定變更會停止目前來源，保留今日累計。</p>
+<button id="resetCounts" class="danger">清除今日計數</button></section>
+<section class="card"><h2>門口／通道的安裝建議</h2><p>固定鏡頭，讓兩側都有足夠的可見距離；用有效範圍排除旁邊行人。先用有人工標記的短片比對正反向計數，再調整緩衝區和位置。遮擋嚴重或人物太小時，先改善鏡位及光線。</p></section>{% endif %}
+{% endblock %}
+{% block scripts %}<script>
+window.cameraConfig={mode:{{ mode|tojson }},endpoint:{{ (url_for('flow.process_flow_frame') if mode=='flow' else url_for('face.process_frame'))|tojson }},
+stats:{{ url_for('flow.get_current_stats')|tojson }},settings:{{ url_for('flow.settings')|tojson }},
+stop:{{ url_for('flow.stop_camera')|tojson }},reset:{{ url_for('flow.reset_counters')|tojson }}};
+</script><script src="{{ url_for('static',filename='camera.js') }}" defer></script>{% endblock %}

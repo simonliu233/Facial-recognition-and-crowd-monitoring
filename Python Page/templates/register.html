@@ -1,0 +1,6 @@
+{% extends 'base.html' %}{% block content %}
+<section class="card narrow"><h1>建立本機帳戶</h1><form method="post">{{ form.hidden_tag() }}
+<label>{{ form.username.label }}{{ form.username(autocomplete='username',required=true) }}</label><small>4–30 字</small>
+<label>{{ form.password.label }}{{ form.password(autocomplete='new-password',required=true) }}</label><small>至少 8 字，UTF-8 編碼最多 72 bytes</small>
+{% for field in form %}{% for error in field.errors %}<p class="error">{{ error }}</p>{% endfor %}{% endfor %}
+<p>{{ form.submit(class_='button') }}</p></form><a href="{{ url_for('login_page') }}">返回登入</a></section>{% endblock %}
